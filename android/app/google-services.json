@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "537695681724",
+    "project_id": "eurononefirebase",
+    "storage_bucket": "eurononefirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537695681724:android:6b5c0b2f1196449164a4b9",
+        "android_client_info": {
+          "package_name": "com.euronone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537695681724-b3ilp4j1vp7gt0fbqeq5bdkve3l8mlfe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.euronone",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "537695681724-guhe6782dsahd865ibn3jsjmnanno4hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmyt-j27KLWZK2JDsLiJUNx0di7NekSRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537695681724-guhe6782dsahd865ibn3jsjmnanno4hk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "537695681724-6iu490qlase1b5iqdpcaa7n0h9bfp5b1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.euronone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
