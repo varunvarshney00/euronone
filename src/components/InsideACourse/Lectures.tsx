@@ -1,20 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { moderateScale } from 'react-native-size-matters'
-import { courseList } from '../../utils/dummyData'
-import {
-  Pressable,
-  SafeAreaView,
-  Button,
-} from 'react-native';
-import Animated, {
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { moderateScale } from 'react-native-size-matters';
+import { courseList } from '../../utils/dummyData';
 
 const Lectures = ({ passedTitle }) => {
 
@@ -54,35 +41,35 @@ const Lectures = ({ passedTitle }) => {
 
             )}
         </View >
-    )
-}
+    );
+};
 
-export default Lectures
+export default Lectures;
 
 const styles = StyleSheet.create({
     title: {
         color: 'white',
         fontWeight: '800',
         fontSize: moderateScale(18),
-        marginBottom:moderateScale(13)
+        marginBottom:moderateScale(13),
     },
     container: {
         padding: moderateScale(20),
-        paddingTop: moderateScale(30)
+        paddingTop: moderateScale(30),
     },
     topicname: {
         color: '#6F6F6F',
         fontSize: moderateScale(18.6),
         fontWeight: '500',
-        marginTop: moderateScale(20)
+        marginTop: moderateScale(20),
     },
     lecturename:{
         color:'#fff',
-        fontWeight:'500'
+        fontWeight:'500',
     },
     lecturescontainer:{
         padding:moderateScale(20),
         borderBottomWidth:2,
-        borderColor:"#2C2C2F"
-    }
-})
+        borderColor:'#2C2C2F',
+    },
+});

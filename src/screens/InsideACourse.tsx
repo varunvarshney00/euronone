@@ -12,6 +12,7 @@ import { Images } from '../assets'
 import { vh } from '../constants/Dimensions'
 import { navigationrRef } from '../utils/NavigationUtils'
 import Lectures from '../components/InsideACourse/Lectures'
+import Reviews from '../components/InsideACourse/Reviews'
 
 
 const DATA = [
@@ -134,7 +135,7 @@ const InsideACourse = ({ route }) => {
                             )}{selectedTab === 'Q&A' && (
                                 <Text>yha pr q&a ka content aa jayega</Text>
                             )}{selectedTab === 'Reviews' && (
-                                <Text>yha pr Reviews ka content aa jayega</Text>
+                                <Reviews/>
                             )}
                         </View>
                     </View>

@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { vh } from '../../constants/Dimensions';
 import { vw } from '../../constants/Dimensions';
+import { BASE_URL } from '@env';
+import { ENDPOINTS } from '../../utils/Endpoints';
+
 
 interface CategoryItem {
   id: string;
@@ -31,23 +34,14 @@ const renderItem = ({ item }: { item: CategoryItem }) => {
 const Categories: React.FC = () => {
   const [DATA, setDATA] = useState<CategoryItem[]>([]);
 
-  // const BASE_URL=`https://api.euron.one/api/`
-
-  // const ENDPOINTS={
-  //   Categories:`v1/categories`,
-
-  // }
-
-
-
   useEffect(() => {
 
-    // let dataToSend={
-    //   page:1,limt:20
-    // }
+    let dataToSend = {
+      page: 1, limt: 20
+    }
     axios
-      // .get(`${BASE_URL}${ENDPOINTS.Categories}?${dataToSend.limt}&${dataToSend.page}`)
-      .get('https://api.euron.one/api/v1/categories?page=1&limit=20')
+      .get(`${BASE_URL}${ENDPOINTS.Categories}?${dataToSend.limt}&${dataToSend.page}`)
+      // .get('https://api.euron.one/api/v1/categories?page=1&limit=20')
       .then(response => {
         const apiData: CategoryItem[] = response.data.data;
         const allElement: CategoryItem = { id: '0', title: 'All' };
