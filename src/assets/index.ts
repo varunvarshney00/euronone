@@ -45,7 +45,12 @@ const Images = {
     clock: require('./InsideCourse/clock.png'),
     globe: require('./InsideCourse/globe.png'),
     tick: require('./InsideCourse/tick.png'),
-    movefwd: require('./InsideCourse/movefwd.png')
+    movefwd: require('./InsideCourse/movefwd.png'),
+    analytics: require('./HomeScreen/header/analytics.png'),
+    logout: require('./HomeScreen/header/logout.png'),
+    mylearning: require('./HomeScreen/header/mylearning.png'),
+    myprofile: require('./HomeScreen/header/myprofile.png'),
+    notificationbell: require('./HomeScreen/header/notificationbell.png'),
 };
 
 export { Images };

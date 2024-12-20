@@ -13,13 +13,20 @@ const Header = ({ user }) => {
     const navigation = useNavigation();
     const [showList, setShowList] = useState(false);
 
+    const myprofile = Images.myprofile;
+    const mycart = Images.shoppingCart;
+    const analytics = Images.analytics;
+    const mylearning = Images.mylearning;
+    const notifications = Images.notificationbell;
+    const logout = Images.logout;
+
     const dropdownItems = [
-        { id: '1', label: 'My Profile', screen: 'Profile' },
-        { id: '2', label: 'My Cart', screen: 'My Cart' },
-        { id: '3', label: 'Analytics', screen: 'Analytics' },
-        { id: '4', label: 'My Learning', screen: 'My Learning' },
-        { id: '5', label: 'Notifications', screen: 'Notifications' },
-        { id: '6', label: 'Logout', screen: 'Logout' },
+        { id: '1', label: 'My Profile', screen: 'Profile', img: myprofile },
+        { id: '2', label: 'My Cart', screen: 'My Cart', img: mycart },
+        { id: '3', label: 'Analytics', screen: 'Analytics', img: analytics },
+        { id: '4', label: 'My Learning', screen: 'My Learning', img: mylearning },
+        { id: '5', label: 'Notifications', screen: 'Notifications', img: notifications },
+        { id: '6', label: 'Logout', screen: 'Logout', img: logout },
     ];
 
     const handleItemPress = async (screen) => {
@@ -80,7 +87,8 @@ const Header = ({ user }) => {
                                         style={styles.dropdownItem}
                                         onPress={() => handleItemPress(item.screen)}
                                     >
-                                        <Text style={styles.dropdownText}>{item.label}</Text>
+                                        <Image source={item.img} style={[styles.icon, item.img === logout ? { tintColor: '#F77171' } : null]} />
+                                        <Text style={[styles.dropdownText, item.label === 'Logout' ? { color: '#F77171' } : null]}>{item.label}</Text>
                                     </TouchableOpacity>
                                 )}
                             />
@@ -161,7 +169,7 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         position: 'absolute',
-        top: vh(40),
+        top: moderateScale(45),
         right: 10,
         backgroundColor: '#071516',
         borderRadius: 8,
@@ -172,17 +180,28 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         // borderWidth: 1,
         // borderColor: 'green',
-        width: moderateScale(230),
+        width: moderateScale(240),
         zIndex: 1000,
+        padding: moderateScale(4)
     },
     dropdownItem: {
         padding: vh(10),
+        flexDirection: 'row',
+        alignItems: 'center'
         // borderBottomWidth: 2,
         // borderBottomColor: '#ddd',
     },
     dropdownText: {
         color: 'white',
         fontSize: moderateScale(18),
-        fontWeight:'500'
+        fontWeight: '500'
     },
+    icon: {
+        height: moderateScale(20),
+        width: moderateScale(20),
+        resizeMode: 'contain',
+        tintColor: 'white',
+        margin: moderateScale(2),
+        marginHorizontal: moderateScale(14)
+    }
 });
