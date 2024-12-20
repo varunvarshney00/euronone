@@ -1,76 +1,112 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { Images } from '../../assets';
-import { vh, vw } from '../../constants/Dimensions';
-import { getAuth, signOut } from '@react-native-firebase/auth';
+import {
+    Alert,
+    Image,
+    StyleSheet,
+    Text, TouchableOpacity,
+    View,
+    FlatList,
+} from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { navigationrRef } from '../../utils/NavigationUtils';
-import { Alert } from 'react-native';
+import { getAuth, signOut } from '@react-native-firebase/auth';
+import { Images } from '../../assets';
+import { navigate, replace } from '../../utils/NavigationUtils';
 import { moderateScale } from 'react-native-size-matters';
 
+interface HeaderProps {
+    user?: {
+        photoURL?: string;
+    };
+}
 
-const Header = ({ user }) => {
-    const navigation = useNavigation();
+interface DropdownItem {
+    id: string;
+    label: string;
+    screen: string;
+    img: any;
+}
+
+const Header: React.FC<HeaderProps> = ({ user }) => {
+
+    // const navigation = useNavigation();
     const [showList, setShowList] = useState(false);
+    const navigation = useNavigation();
 
-    const myprofile = Images.myprofile;
-    const mycart = Images.shoppingCart;
-    const analytics = Images.analytics;
-    const mylearning = Images.mylearning;
-    const notifications = Images.notificationbell;
-    const logout = Images.logout;
+    // Images
 
-    const dropdownItems = [
-        { id: '1', label: 'My Profile', screen: 'Profile', img: myprofile },
-        { id: '2', label: 'My Cart', screen: 'My Cart', img: mycart },
-        { id: '3', label: 'Analytics', screen: 'Analytics', img: analytics },
-        { id: '4', label: 'My Learning', screen: 'My Learning', img: mylearning },
-        { id: '5', label: 'Notifications', screen: 'Notifications', img: notifications },
-        { id: '6', label: 'Logout', screen: 'Logout', img: logout },
+    // Drop down items json
+    const dropdownItems: DropdownItem[] = [
+        { id: '1', label: 'My Profile', screen: 'Profile', img: Images.myprofile },
+        { id: '2', label: 'My Cart', screen: 'My Cart', img: Images.shoppingCart },
+        { id: '3', label: 'Analytics', screen: 'Analytics', img: Images.analytics },
+        { id: '4', label: 'My Learning', screen: 'My Learning', img: Images.mylearning },
+        { id: '5', label: 'Notifications', screen: 'Notifications', img: Images.notificationbell },
+        { id: '6', label: 'Logout', screen: 'Logout', img: Images.logout },
     ];
 
-    const handleItemPress = async (screen) => {
+    // When any item is pressed inside drop down list.
+    const handleItemPress = async (screen: string) => {
         if (screen === 'Logout') {
             const auth = getAuth();
             if (!auth.currentUser) {
                 // User is already logged out
+                replace('Sign In');
                 Alert.alert('Info', 'You are already logged out.');
                 return;
             }
 
             try {
                 await signOut(auth);
-                console.log('User logged out');
-                navigation.navigate('Sign In');
+                console.log('User logged out Successfully');
+                replace('Sign In');
             } catch (error) {
                 console.error('Error logging out:', error);
                 Alert.alert('Error', 'An error occurred while logging out. Please try again.');
             }
         } else {
-            navigationrRef.navigate(screen);
+            if (screen) {
+                navigate(screen);
+            }
         }
+        setShowList(false);
     };
 
+    // Main return component
     return (
+
+        // Full header
         <View style={styles.container}>
+
+            {/* Left side of header */}
             <View style={styles.leftContainer}>
+                {/* Burger */}
                 <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
                     <Image source={Images.menu} style={styles.burgerLogo} />
                 </TouchableOpacity>
+
+                {/* Euron logo */}
                 <View style={styles.logoContainer}>
                     <Image source={Images.mainLogo} style={styles.mainLogo} />
                     <Text style={styles.orgText}>Org</Text>
                 </View>
             </View>
 
+            {/* Right side of the header */}
             <View style={styles.rightContainer}>
                 <Image source={Images.search} style={styles.searchLogo} />
+
+                {/* Avatar and drop down */}
                 <View style={styles.avatarDropdownContainer}>
+
+                    {/* Avatar */}
                     {user?.photoURL ? (
                         <Image source={{ uri: user.photoURL }} style={styles.avatar} />
                     ) : (
-                        <View style={styles.avatar} />
+                        <Image source={Images.avatarimage} style={styles.avatar} />
                     )}
+
+                    {/* Dropdown list */}
                     <TouchableOpacity onPress={() => setShowList(!showList)}>
                         <Image source={Images.downarrow} style={styles.downArrow} />
                     </TouchableOpacity>
@@ -87,7 +123,7 @@ const Header = ({ user }) => {
                                         style={styles.dropdownItem}
                                         onPress={() => handleItemPress(item.screen)}
                                     >
-                                        <Image source={item.img} style={[styles.icon, item.img === logout ? { tintColor: '#F77171' } : null]} />
+                                        <Image source={item.img} style={[styles.icon, item.label === 'Logout' ? { tintColor: '#F77171' } : null]} />
                                         <Text style={[styles.dropdownText, item.label === 'Logout' ? { color: '#F77171' } : null]}>{item.label}</Text>
                                     </TouchableOpacity>
                                 )}
@@ -106,71 +142,74 @@ export default Header;
 
 const styles = StyleSheet.create({
     container: {
-        height: vh(80),
+        height: moderateScale(70),
         flexDirection: 'row',
         backgroundColor: '#071516',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingHorizontal: moderateScale(15),
     },
     leftContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: vw(181),
+        width: moderateScale(181),
     },
     logoContainer: {
         flexDirection: 'row',
+        marginLeft: moderateScale(12),
     },
     orgText: {
         color: '#26A69A',
         fontWeight: '900',
-        fontSize: 16,
-        marginTop: -7,
+        fontSize: moderateScale(16),
+        marginTop: moderateScale(-7),
     },
     mainLogo: {
         tintColor: 'white',
-        height: vh(24),
-        width: vw(93),
+        height: moderateScale(24),
+        width: moderateScale(93),
         resizeMode: 'contain',
     },
     burgerLogo: {
-        height: vh(40),
-        width: vw(40),
+        height: moderateScale(40),
+        width: moderateScale(40),
         tintColor: 'white',
+        resizeMode: 'contain',
     },
     rightContainer: {
         alignItems: 'center',
         flexDirection: 'row',
-        width: vw(101),
+        width: moderateScale(101),
         justifyContent: 'space-between',
     },
     searchLogo: {
-        height: vh(30),
-        width: vh(30),
+        height: moderateScale(30),
+        width: moderateScale(30),
         tintColor: 'white',
         resizeMode: 'contain',
     },
     avatarDropdownContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: vw(55),
+        width: moderateScale(55),
         justifyContent: 'space-between',
     },
     avatar: {
-        height: vh(35),
-        width: vh(35),
+        height: moderateScale(35),
+        width: moderateScale(35),
         borderRadius: 100,
         backgroundColor: 'white',
     },
     downArrow: {
-        height: vh(15),
-        width: vw(15),
+        height: moderateScale(15),
+        width: moderateScale(15),
         tintColor: 'white',
         resizeMode: 'contain',
     },
     dropdown: {
         position: 'absolute',
         top: moderateScale(45),
-        right: 10,
+        right: moderateScale(10),
         backgroundColor: '#071516',
         borderRadius: 8,
         elevation: 5,
@@ -178,23 +217,19 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        // borderWidth: 1,
-        // borderColor: 'green',
         width: moderateScale(240),
         zIndex: 1000,
-        padding: moderateScale(4)
+        padding: moderateScale(4),
     },
     dropdownItem: {
-        padding: vh(10),
+        padding: moderateScale(10),
         flexDirection: 'row',
-        alignItems: 'center'
-        // borderBottomWidth: 2,
-        // borderBottomColor: '#ddd',
+        alignItems: 'center',
     },
     dropdownText: {
         color: 'white',
         fontSize: moderateScale(18),
-        fontWeight: '500'
+        fontWeight: '500',
     },
     icon: {
         height: moderateScale(20),
@@ -202,6 +237,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         tintColor: 'white',
         margin: moderateScale(2),
-        marginHorizontal: moderateScale(14)
-    }
+        marginHorizontal: moderateScale(14),
+    },
 });
