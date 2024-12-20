@@ -80,6 +80,7 @@ const Data = ({ searchQuery }) => {
                     renderItem={renderCard}
                     keyExtractor={(item) => item.id.toString()}
                     scrollEnabled={false}
+    
                 />
             ) : (
                 <Text style={styles.comingSoonText}>Coming Soon...</Text>

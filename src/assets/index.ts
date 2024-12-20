@@ -40,6 +40,12 @@ const Images = {
     drawerprojects: require('./DrawerIcons/drawerprojects.png'),
     drawerroadmaps: require('./DrawerIcons/drawerroadmaps.png'),
     drawerwebinars: require('./DrawerIcons/drawerwebinars.png'),
+    call: require('./Roadmaps/call.png'),
+    calendar: require('./InsideCourse/calendar.png'),
+    clock: require('./InsideCourse/clock.png'),
+    globe: require('./InsideCourse/globe.png'),
+    tick: require('./InsideCourse/tick.png'),
+    movefwd: require('./InsideCourse/movefwd.png')
 };
 
 export { Images };

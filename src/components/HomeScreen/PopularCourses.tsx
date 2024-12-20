@@ -34,13 +34,13 @@ const PopularCourses = () => {
 
 
                     <View style={{ flex: 0.5, }}>
-                        <Image source={item.image} style={styles.courseimage} />
+                        <Image source={{ uri: item.webThumbnailUrl}} style={styles.courseimage} />
                     </View>
 
 
 
                     <View style={{ flex: 0.5, paddingHorizontal: 20 }}>
-                        
+
                         <Text style={styles.title} numberOfLines={1}>{item.title} </Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15 }}>
@@ -76,7 +76,7 @@ const PopularCourses = () => {
                                 borderRadius: 10,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                backgroundColor:'#072232'
+                                backgroundColor: '#072232'
                             }}>
                                 <Image source={Images.shoppingCart} style={styles.shoppingCart} />
                             </View>
@@ -85,7 +85,7 @@ const PopularCourses = () => {
                                 borderRadius: 10,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                backgroundColor:'#072232'
+                                backgroundColor: '#072232'
                             }}>
                                 <Image source={Images.shareIcon} style={styles.shareIcon} />
 
@@ -93,27 +93,46 @@ const PopularCourses = () => {
                         </View>
 
                     </View>
-                </LinearGradient>];.
+                </LinearGradient>;.
 
             </View >
 
         );
     };
 
+    // useEffect(() => {
+    //     axios.get('https://api.euron.one/api/v1/courses/popular?page=1&limit=10')
+    //         .then(response => {
+    //             const apiData = response.data.data;
+    //             const combined = apiData.map((course, index) => ({
+    //                 ...course,
+    //                 image: IMAGEDATA[index % IMAGEDATA.length],
+    //             }))
+    //             setDATA(combined);
+    //         })
+    //         .catch(error => {
+    //             console.log('error=>', error);
+    //         });
+    // }, []);
+
     useEffect(() => {
         axios.get('https://api.euron.one/api/v1/courses/popular?page=1&limit=10')
             .then(response => {
-                const apiData = response.data.data;
-                const combined = apiData.map((course, index) => ({
-                    ...course,
-                    image: IMAGEDATA[index % IMAGEDATA.length],
-                }))
-                setDATA(combined);
+                const updatedData = response.data.data.map((item) => {
+                    const filename = item.webThumbnailUrl.split('/').pop();
+                    return {
+                        ...item,
+                        webThumbnailUrl: `https://euron.one/_next/image?url=https%3A%2F%2Feuron-prod-thumbnails.s3.ap-south-1.amazonaws.com%2Fcourse%2F${filename}&w=750&q=75`,
+                    };
+                });
+                setDATA(updatedData);
             })
             .catch(error => {
                 console.log('error=>', error);
             });
     }, []);
+
+
 
     return (
         <View>

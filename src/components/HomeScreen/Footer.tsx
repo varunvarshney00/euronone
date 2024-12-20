@@ -19,6 +19,11 @@ const Footer = () => {
                 <Text style={styles.address}>Bengaluru, Karnataka, 560049</Text>
             </View>
 
+            <View style={styles.contactcontainer}>
+                <Image source={Images.call} style={styles.map} />
+                <Text style={styles.address}>9019065931</Text>
+            </View>
+
             <View style={styles.socialmediacontainer}>
                 <Image source={Images.instagram} style={styles.commonicon} />
                 <Image source={Images.youtube} style={styles.commonicon} />
@@ -83,9 +88,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#141E22',
         padding: 20,
         paddingVertical: 40,
-        flex:2,
-        width:"100%",
-        marginTop:vh(12)
+        flex: 2,
+        width: "100%",
+        marginTop: vh(12)
     },
     contacteuron: {
         color: '#C1C4C9'

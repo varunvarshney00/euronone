@@ -6,6 +6,7 @@ import { getAuth, signOut } from '@react-native-firebase/auth';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { navigationrRef } from '../../utils/NavigationUtils';
 import { Alert } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 
 
 const Header = ({ user }) => {
@@ -66,6 +67,9 @@ const Header = ({ user }) => {
                     <TouchableOpacity onPress={() => setShowList(!showList)}>
                         <Image source={Images.downarrow} style={styles.downArrow} />
                     </TouchableOpacity>
+
+
+                    {/* My dropdown list */}
                     {showList && (
                         <View style={styles.dropdown}>
                             <FlatList
@@ -82,6 +86,8 @@ const Header = ({ user }) => {
                             />
                         </View>
                     )}
+
+
                 </View>
             </View>
         </View>
@@ -157,25 +163,26 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: vh(40),
         right: 10,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#071516',
         borderRadius: 8,
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        borderWidth: 1,
-        borderColor: 'green',
-        width: 200,
+        // borderWidth: 1,
+        // borderColor: 'green',
+        width: moderateScale(230),
         zIndex: 1000,
     },
     dropdownItem: {
         padding: vh(10),
-        borderBottomWidth: 2,
-        borderBottomColor: '#ddd',
+        // borderBottomWidth: 2,
+        // borderBottomColor: '#ddd',
     },
     dropdownText: {
-        color: 'black',
-        fontSize: 16,
+        color: 'white',
+        fontSize: moderateScale(18),
+        fontWeight:'500'
     },
 });

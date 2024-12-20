@@ -15,6 +15,7 @@ import Partnership from '../../DrawerSideScreens/Partnership';
 import Webinars from '../../DrawerSideScreens/Webinars';
 import Projects from '../../DrawerSideScreens/Projects';
 import Books from '../../DrawerSideScreens/Books';
+import CourseDescriptionScreen from '../InsideACourse/CourseDescriptionScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -86,6 +87,7 @@ const DrawerOnBurgerIcon: React.FC = () => {
       <Drawer.Screen name="Webinars" component={Webinars} />
       <Drawer.Screen name="Projects" component={Projects} />
       <Drawer.Screen name="Books" component={Books} />
+      <Drawer.Screen name="Course Description Screen" component={CourseDescriptionScreen} />
     </Drawer.Navigator>
   );
 };

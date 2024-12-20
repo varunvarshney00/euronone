@@ -6,7 +6,6 @@ import axios from 'axios'
 import { WebView } from 'react-native-webview';
 import Header from '../components/HomeScreen/Header'
 import auth from '@react-native-firebase/auth';
-import Footer from '../components/HomeScreen/Footer'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Images } from '../assets'
 import { vh } from '../constants/Dimensions'

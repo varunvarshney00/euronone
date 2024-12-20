@@ -11,15 +11,16 @@ import { Images } from '../assets';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/Dimensions';
 import { navigationrRef } from '../utils/NavigationUtils';
 
+const videos = [
+  require('../assets/Reels/video1.mp4'),
+  require('../assets/Reels/video2.mp4'),
+  require('../assets/Reels/video3.mp4'),
+  require('../assets/Reels/video4.mp4'),
+  require('../assets/Reels/video5.mp4')
+];
+
 const Bytes = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const videos = [
-    require('../assets/Reels/video1.mp4'),
-    require('../assets/Reels/video2.mp4'),
-    require('../assets/Reels/video3.mp4'),
-    require('../assets/Reels/video4.mp4'),
-  ];
 
   const handleScroll = (e) => {
     const index = Math.round(e.nativeEvent.contentOffset.y / SCREEN_HEIGHT);
@@ -31,8 +32,13 @@ const Bytes = () => {
     navigationrRef.goBack();
   };
 
+  // main return
   return (
+
+    // main container
     <View style={styles.container}>
+
+      {/* reels flatlist */}
       <FlatList
         data={videos}
         keyExtractor={(_, index) => index.toString()}
@@ -46,23 +52,22 @@ const Bytes = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         initialNumToRender={1}
+
         getItemLayout={(data, index) => ({
           length: SCREEN_HEIGHT,
           offset: SCREEN_HEIGHT * index,
           index,
         })}
+
         removeClippedSubviews
+
         renderItem={({ item, index }) => (
+
           <View style={styles.videoContainer}>
+
             {/* Back Button */}
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={handleGoBack}
-            >
-              <Image
-                source={Images.backarrow}
-                style={styles.backArrowIcon}
-              />
+            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+              <Image source={Images.backarrow} style={styles.backArrowIcon} />
             </TouchableOpacity>
 
             {/* Video Component */}
@@ -70,7 +75,7 @@ const Bytes = () => {
               style={styles.video}
               paused={selectedIndex !== index}
               source={item}
-              resizeMode="cover"
+              resizeMode="contain"
               repeat
             />
 
@@ -82,12 +87,11 @@ const Bytes = () => {
               }
             >
               {selectedIndex === -1 && (
-                <Image
-                  source={Images.pause}
-                  style={styles.pauseIcon}
-                />
+                <Image source={Images.pause} style={styles.pauseIcon} />
               )}
             </TouchableOpacity>
+
+
           </View>
         )}
       />
@@ -116,8 +120,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   backArrowIcon: {
-    height: 45,
-    width: 45,
+    height: 30,
+    width: 30,
     resizeMode: 'contain',
     tintColor: 'white',
   },
