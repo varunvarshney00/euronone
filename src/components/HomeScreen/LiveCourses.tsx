@@ -5,9 +5,13 @@ import axios from 'axios';
 import { Images } from '../../assets';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../utils/NavigationUtils';
+// import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
+
 
 const LiveCourses = () => {
     const [DATA, setDATA] = useState([]);
+    
 
     useEffect(() => {
         axios.get('https://api.euron.one/api/v1/courses/live?page=1&limit=10&purchaseMode=PAID')
@@ -28,6 +32,7 @@ const LiveCourses = () => {
 
     const renderItem = ({ item }) => {
         return (
+            
             <TouchableOpacity style={styles.card} onPress={() => navigate('Course Description Screen', { id: item.slug })}>
 
                 <LinearGradient

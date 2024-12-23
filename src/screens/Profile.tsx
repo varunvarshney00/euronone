@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import Header from '../components/HomeScreen/Header';
 import { moderateScale } from 'react-native-size-matters';
-import { vh } from '../constants/Dimensions';
 import DropDownItem from '../components/Profile/DropDownItem';
 import Footer from '../components/HomeScreen/Footer';
+import { Images } from '../assets';
 
 const Profile = () => {
     const user = auth().currentUser;
@@ -15,6 +15,8 @@ const Profile = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Header user={user} />
+
+
             <ScrollView>
 
                 <View>
@@ -23,17 +25,18 @@ const Profile = () => {
                         {user?.photoURL ? (
                             <Image source={{ uri: user.photoURL }} style={styles.avatar} />
                         ) : (
-                            <View style={styles.avatar} />
+                            <Image source={Images.avatarimage} style={styles.avatar} />
                         )}
                     </View>
 
 
                     {/* name */}
-                    <Text style={styles.name}>{user?.displayName}</Text>
+                    <Text style={styles.name}>
+                        {user ? (user.displayName) : <Text>User Name</Text>}
+                    </Text>
 
                     {/* username */}
-                    <Text style={styles.username}>@{user?.displayName?.split(' ').reverse().pop()}</Text>
-
+                    <Text style={styles.username}>@{user ? user.displayName?.split(' ').reverse().pop() : <Text>user</Text>}</Text>
                 </View>
 
                 <View>
@@ -92,8 +95,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 15,
         borderRadius: moderateScale(10),
-        marginBottom:moderateScale(30),
-        marginTop:moderateScale(30)
+        marginBottom: moderateScale(30),
+        marginTop: moderateScale(30),
     },
     logout: {
         color: '#0A99AC',

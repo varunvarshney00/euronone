@@ -11,7 +11,7 @@ import {
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { Images } from '../../assets';
-import { navigate, replace } from '../../utils/NavigationUtils';
+import { navigate, resetAndNavigate } from '../../utils/NavigationUtils';
 import { moderateScale } from 'react-native-size-matters';
 
 interface HeaderProps {
@@ -33,8 +33,6 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
     const [showList, setShowList] = useState(false);
     const navigation = useNavigation();
 
-    // Images
-
     // Drop down items json
     const dropdownItems: DropdownItem[] = [
         { id: '1', label: 'My Profile', screen: 'Profile', img: Images.myprofile },
@@ -51,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
             const auth = getAuth();
             if (!auth.currentUser) {
                 // User is already logged out
-                replace('Sign In');
+                resetAndNavigate('Sign In');
                 Alert.alert('Info', 'You are already logged out.');
                 return;
             }
@@ -59,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
             try {
                 await signOut(auth);
                 console.log('User logged out Successfully');
-                replace('Sign In');
+                resetAndNavigate('Sign In');
             } catch (error) {
                 console.error('Error logging out:', error);
                 Alert.alert('Error', 'An error occurred while logging out. Please try again.');

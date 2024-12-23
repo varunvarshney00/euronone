@@ -1,3 +1,4 @@
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import Navigation from './src/navigation/Navigation';

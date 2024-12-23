@@ -6,6 +6,8 @@ import NameText from './NameAndTextBox/NameText';
 import Button from './Button/Button';
 import SignInWithGoogle from './Button/SignInWithGoogle';
 import { moderateScale } from 'react-native-size-matters';
+import auth from '@react-native-firebase/auth';
+
 
 const SignUpBody = () => {
     return (

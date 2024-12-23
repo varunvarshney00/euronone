@@ -10,8 +10,19 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ name }) => {
+
+    const handleButtonPress = () => {
+        if (name === 'Sign in') {
+            console.log('signin');
+        }
+        if (name === 'Sign up') {
+            console.log('signup');
+        }
+        resetAndNavigate('Home Screen');
+    }
+
     return (
-        <TouchableOpacity onPress={() => { resetAndNavigate('Home Screen'); }}>
+        <TouchableOpacity onPress={() => handleButtonPress()}>
 
             <View style={styles.buttoncontainer}>
                 <Text style={styles.button}>{name}</Text>

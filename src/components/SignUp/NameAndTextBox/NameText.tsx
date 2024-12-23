@@ -1,8 +1,10 @@
 // done
 
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { moderateScale } from 'react-native-size-matters';
+import auth from '@react-native-firebase/auth';
+
 
 interface NameTextProps {
     name: string | null;
@@ -11,6 +13,10 @@ interface NameTextProps {
 }
 
 const NameText: React.FC<NameTextProps> = ({ name, placeholder, width }) => {
+    const [inputText, setInputText] = useState('');
+    // console.log('it-->', inputText);
+
+
     return (
 
         <View>
@@ -23,6 +29,8 @@ const NameText: React.FC<NameTextProps> = ({ name, placeholder, width }) => {
                 placeholder={placeholder}
                 style={[styles.textinput, { width }]}
                 placeholderTextColor="#6A7280"
+                value={inputText}
+                onChangeText={setInputText}
             />
 
         </View>
