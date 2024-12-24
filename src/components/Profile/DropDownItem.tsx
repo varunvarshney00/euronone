@@ -7,6 +7,11 @@ const DropDownItem = ({ label }) => {
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [menuShown, setMenuShown] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    
 
     const handleOnPress = () => {
         setSelectedItem(label);
@@ -29,6 +34,8 @@ const DropDownItem = ({ label }) => {
                         placeholder="Enter your first name"
                         style={styles.textinput}
                         placeholderTextColor="#9BA3AF"
+                        value={firstName}
+                        onChangeText={setFirstName}
                     />
 
                     <Text style={styles.heading}>Last Name</Text>
@@ -36,6 +43,8 @@ const DropDownItem = ({ label }) => {
                         placeholder="Enter your last name"
                         style={styles.textinput}
                         placeholderTextColor="#9BA3AF"
+                        value={lastName}
+                        onChangeText={setLastName}
                     />
 
                     <Text style={styles.heading}>Phone Number</Text>
@@ -103,8 +112,8 @@ const DropDownItem = ({ label }) => {
 export default DropDownItem;
 
 const styles = StyleSheet.create({
-    visitcontainer:{
-        backgroundColor:'#0D747C'
+    visitcontainer: {
+        backgroundColor: '#0D747C'
     },
     visit: {
         color: 'white',

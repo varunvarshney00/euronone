@@ -4,6 +4,11 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import { moderateScale } from 'react-native-size-matters';
 import auth from '@react-native-firebase/auth';
+import { setCredentials } from '../../../redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+
 
 
 interface NameTextProps {
@@ -13,8 +18,23 @@ interface NameTextProps {
 }
 
 const NameText: React.FC<NameTextProps> = ({ name, placeholder, width }) => {
+    const { email, password, error } = useSelector((state) => state.auth);
+
+    const dispatch = useDispatch();
+
     const [inputText, setInputText] = useState('');
-    // console.log('it-->', inputText);
+
+    const onTextChange = (text: any) => {
+        setInputText(text)
+        {
+            placeholder === 'Email' &&
+                dispatch(setCredentials({ email: text, password }))
+        }
+        {
+            placeholder === 'Password' &&
+                dispatch(setCredentials({ email, password: text }))
+        }
+    }
 
 
     return (
@@ -30,7 +50,7 @@ const NameText: React.FC<NameTextProps> = ({ name, placeholder, width }) => {
                 style={[styles.textinput, { width }]}
                 placeholderTextColor="#6A7280"
                 value={inputText}
-                onChangeText={setInputText}
+                onChangeText={(text) => onTextChange(text)}
             />
 
         </View>

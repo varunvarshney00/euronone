@@ -4,12 +4,17 @@ import React from 'react';
 import Navigation from './src/navigation/Navigation';
 import './gesture-handler';
 import 'react-native-gesture-handler';
+import store from '../euronone/src/redux/store';
+import { Provider } from 'react-redux';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Navigation />
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <Navigation />
+      </View>
+    </Provider>
+
   );
 };
 

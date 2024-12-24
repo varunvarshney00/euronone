@@ -14,8 +14,8 @@ const Profile = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header user={user} />
 
+            <Header user={user} />
 
             <ScrollView>
 

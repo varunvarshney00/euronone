@@ -13,6 +13,8 @@ import { getAuth, signOut } from '@react-native-firebase/auth';
 import { Images } from '../../assets';
 import { navigate, resetAndNavigate } from '../../utils/NavigationUtils';
 import { moderateScale } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
+import { logout, setAuthState, setCredentials } from '../../redux/authSlice';
 
 interface HeaderProps {
     user?: {
@@ -32,6 +34,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
     // const navigation = useNavigation();
     const [showList, setShowList] = useState(false);
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     // Drop down items json
     const dropdownItems: DropdownItem[] = [
@@ -49,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
             const auth = getAuth();
             if (!auth.currentUser) {
                 // User is already logged out
+                // dispatch(setCredentials({ email: ' ', password: '' }))
                 resetAndNavigate('Sign In');
                 Alert.alert('Info', 'You are already logged out.');
                 return;
@@ -56,7 +60,10 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 
             try {
                 await signOut(auth);
-                console.log('User logged out Successfully');
+                // console.log('User logged out Successfully');
+                dispatch(logout());
+                dispatch(setAuthState({ isAuthenticated: false }));
+                Alert.alert("User logged out successfully.")
                 resetAndNavigate('Sign In');
             } catch (error) {
                 console.error('Error logging out:', error);

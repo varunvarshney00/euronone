@@ -1,9 +1,10 @@
 import auth from '@react-native-firebase/auth';
 import { WEB_CLIENT_ID } from '@env';
+// import { setAuthState, setError } from '../redux/authSlice';
 
 import {
     GoogleSignin,
-    GoogleSigninButton,
+    // GoogleSigninButton,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 
