@@ -18,6 +18,7 @@ import MyLearning from '../screens/MyLearning';
 import Analytics from '../screens/Analytics';
 import MyCart from '../screens/MyCart';
 import CourseDescriptionScreen from '../components/InsideACourse/CourseDescriptionScreen';
+import SplashScreen from '../screens/splashScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +52,8 @@ const Navigation: FC = () => {
                 <Stack.Screen name="My Learning" component={MyLearning} />
 
                 <Stack.Screen name="Notifications" component={Notifications} />
+
+                <Stack.Screen name="Splash Screen" component={SplashScreen} />
 
                 <Stack.Screen name="Course Description Screen" component={CourseDescriptionScreen} />
 

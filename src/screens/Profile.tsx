@@ -32,11 +32,11 @@ const Profile = () => {
 
                     {/* name */}
                     <Text style={styles.name}>
-                        {user ? (user.displayName) : <Text>User Name</Text>}
+                        {user?.displayName ? (user.displayName) : <Text>User Name</Text>}
                     </Text>
 
                     {/* username */}
-                    <Text style={styles.username}>@{user ? user.displayName?.split(' ').reverse().pop() : <Text>user</Text>}</Text>
+                    <Text style={styles.username}>@{user?.displayName ? user.displayName?.split(' ').reverse().pop() : <Text>user</Text>}</Text>
                 </View>
 
                 <View>

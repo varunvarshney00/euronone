@@ -52,6 +52,7 @@ const Images = {
     myprofile: require('./HomeScreen/header/myprofile.png'),
     notificationbell: require('./HomeScreen/header/notificationbell.png'),
     avatarimage: require('./HomeScreen/header/avatarimage.png'),
+    subtitletv: require('./InsideCourse/subtitletv.png'),
 };
 
 export { Images };

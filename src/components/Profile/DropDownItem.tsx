@@ -1,17 +1,30 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { moderateScale } from 'react-native-size-matters';
 import { Images } from '../../assets';
+import auth from '@react-native-firebase/auth';
+
 
 const DropDownItem = ({ label }) => {
+    const user = auth().currentUser;
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [menuShown, setMenuShown] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [email, setEmail] = useState('');
-    
+    const [firstName, setFirstName] = useState(user?.displayName?.split(' ')[0] || '');
+    const [lastName, setLastName] = useState(user?.displayName?.split(' ').slice(-1)[0] || '');
+    const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || '');
+
+    const handleUpdatePress = () => {
+        if (user) {
+            user.updateProfile({ displayName: `${firstName} ${lastName}` })
+                .then(() => {
+                    Alert.alert('Profile Updated Successfully.');
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                });
+        }
+    };
 
     const handleOnPress = () => {
         setSelectedItem(label);
@@ -52,6 +65,8 @@ const DropDownItem = ({ label }) => {
                         placeholder="Enter your phone number"
                         style={styles.textinput}
                         placeholderTextColor="#9BA3AF"
+                        value={phoneNumber}
+                        onChangeText={setPhoneNumber}
                     />
 
                     <Text style={styles.heading}>Email</Text>
@@ -59,6 +74,9 @@ const DropDownItem = ({ label }) => {
                         placeholder="Enter your email"
                         style={styles.textinput}
                         placeholderTextColor="#9BA3AF"
+                        value={user?.email || ''}
+                        editable={false}
+                    // onChangeText={setEmail}
                     />
 
                     <Text style={styles.heading}>Gender</Text>
@@ -73,6 +91,10 @@ const DropDownItem = ({ label }) => {
                         style={styles.textinput}
                         placeholderTextColor="#9BA3AF"
                     />
+
+                    <TouchableOpacity style={styles.updatecontainer} onPress={handleUpdatePress}>
+                        <Text style={styles.update}>Update</Text>
+                    </TouchableOpacity>
                 </View>
             ) : (
                 selectedItem === 'Settings' && menuShown ? (
@@ -88,6 +110,7 @@ const DropDownItem = ({ label }) => {
                                 varun
                             </Text>
                         </View>
+
                     ) : (
                         selectedItem === 'Euron Org' && menuShown ? (
                             <View style={styles.euronorgcontainer}>
@@ -113,19 +136,19 @@ export default DropDownItem;
 
 const styles = StyleSheet.create({
     visitcontainer: {
-        backgroundColor: '#0D747C'
+        backgroundColor: '#0D747C',
     },
     visit: {
         color: 'white',
     },
     donthaveaccess: {
         color: '#D1D5DA',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     limited: {
         fontWeight: '800',
         color: 'white',
-        fontSize: 22
+        fontSize: 22,
     },
     euronorgcontainer: {
         borderWidth: 1,
@@ -143,7 +166,7 @@ const styles = StyleSheet.create({
         marginBottom: moderateScale(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     labelstyle: {
         color: 'white',
@@ -189,11 +212,24 @@ const styles = StyleSheet.create({
         marginTop: moderateScale(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     gendertext: {
         color: 'white',
         fontSize: moderateScale(20),
         fontWeight: '500',
+    },
+    update: {
+        color: 'white',
+        fontSize: moderateScale(18),
+        fontWeight: '600',
+    },
+    updatecontainer: {
+        backgroundColor: '#0A99AC',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: moderateScale(10),
+        borderRadius: moderateScale(10),
+        marginTop: moderateScale(20),
     },
 });

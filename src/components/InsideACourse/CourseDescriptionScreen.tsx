@@ -31,9 +31,6 @@ interface CourseData {
     id?: string[];
 }
 
-interface TopicData {
-    title: 'string';
-}
 
 const user = auth().currentUser;
 
@@ -91,7 +88,7 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
 
     useEffect(() => {
         fetchCourseTopics(DATA.id);
-    }, [DATA.id])
+    }, [DATA.id]);
 
     const webThumbnailUrl = DATA.mobileThumbnailUrl
         ? `https://euron.one/_next/image?url=${encodeURIComponent(
@@ -194,7 +191,7 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
                                 return (
                                     <View style={styles.bulletcont}>
                                         <Image source={Images.movefwd} style={styles.movefwd} />
-                                        <Text style={styles.courseincludesstyle}>{item.text}</Text>
+                                        <Text style={styles.courseincludesstyle}>{item?.text}</Text>
                                     </View>
                                 );
                             })}
@@ -209,13 +206,46 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
                         <View>
                             {TOPIC.length && TOPIC.map((item, index) => {
                                 return (
-                                    <View style={styles.bulletcont}>
-                                        <Text style={styles.courseincludesstyle}>{item.title}</Text>
+                                    <View>
+                                        <View style={styles.bulletcont}>
+                                            <Text style={styles.coursecontenttitle}>{item.title}</Text>
+                                            <Image source={Images.downarrow} style={styles.downarrow} />
+                                        </View>
+                                        <View style={styles.separatorcoursetitle} />
+                                        {item.subtopics.map((sub) => {
+                                            console.log('sub-->', sub.title);
+                                            return (
+                                                <View style={styles.subtitlecontainer}>
+                                                    <Image source={Images.subtitletv} style={styles.subtitletv} />
+                                                    <Text style={styles.subtitle}>
+                                                        {sub.title}
+                                                    </Text>
+                                                </View>
+                                            );
+                                        })}
                                     </View>
                                 );
                             })}
                         </View>
                     </View>
+
+
+
+                    {/* prerequisites */}
+                    <View>
+                        {DATA.prerequisites?.map((prerequisite) => (
+                            <View>
+                                <Text style={{ color: 'white' }}>{prerequisite}</Text>
+                            </View>
+                        ))}
+                    </View>
+
+
+                    {/* Description */}
+                    <View>
+                        <Text style={{ color: 'white', marginTop:20 }}>{DATA.description}</Text>
+                    </View>
+
 
                 </View>
 
@@ -275,7 +305,11 @@ const styles = StyleSheet.create({
         marginHorizontal: moderateScale(25),
     },
     startson: {
-        color: '#D1D5DA',
+        color: 'white',
+        textAlign: 'left',
+        // marginTop: moderateScale(17),
+        fontWeight: '500',
+        fontSize: moderateScale(16),
     },
     december: {
         color: '#66E8F9',
@@ -312,7 +346,7 @@ const styles = StyleSheet.create({
     thiscourse: {
         color: '#159F48',
         marginBottom: moderateScale(17),
-        fontSize: moderateScale(14),
+        fontSize: moderateScale(17),
         paddingHorizontal: moderateScale(8),
     },
     live: {
@@ -340,7 +374,7 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontWeight: '700',
-        fontSize: moderateScale(12),
+        fontSize: moderateScale(15),
         marginBottom: moderateScale(20),
     },
     whatyouwilllearn: {
@@ -353,11 +387,13 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: moderateScale(16),
         width: '90%',
+        marginTop: moderateScale(10),
     },
     courseincludesstyle: {
         color: '#78DFEF',
         fontSize: moderateScale(16),
         width: '90%',
+        marginTop: moderateScale(6),
     },
     tick: {
         height: moderateScale(18),
@@ -374,5 +410,48 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: moderateScale(5),
         alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: moderateScale(10),
+
     },
+    coursecontenttitle: {
+        color: '#D9D9D9',
+        fontSize: moderateScale(18),
+        fontWeight: '700',
+        flexWrap: 'wrap',
+        width: '88%',
+
+    },
+    separatorcoursetitle: {
+        borderWidth: 1,
+        borderColor: '#222A2C',
+        marginBottom: moderateScale(15),
+        marginTop: moderateScale(10),
+    },
+    downarrow: {
+        height: moderateScale(20),
+        width: moderateScale(20),
+        tintColor: '#78DFEF',
+    },
+    subtitle: {
+        color: '#0A99AC',
+        fontSize: moderateScale(16),
+        // marginBottom: moderateScale(5),
+        // marginTop: moderateScale(7),
+    },
+    subtitletv: {
+        height: moderateScale(20),
+        width: moderateScale(20),
+        tintColor: 'white',
+    },
+    subtitlecontainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        padding: moderateScale(12),
+        // borderWidth:1,
+        // borderColor:'white',
+        width: '90%',
+        alignSelf: 'center'
+    }
 });
