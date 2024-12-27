@@ -1,3 +1,5 @@
+// WIP
+
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { moderateScale } from 'react-native-size-matters';
@@ -11,7 +13,7 @@ const Books = () => {
                 <Text style={styles.freebooktext}>Free Books</Text>
                 <Text style={styles.seealltext}>See all</Text>
             </View>
-            <BookContainer/>
+            <BookContainer />
 
 
         </View>

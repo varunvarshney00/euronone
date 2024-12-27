@@ -1,11 +1,13 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+// DONE
+
+// THIS COMPONENT WILL FETCH ALL THE CATEGORY NAMES ON THE HOME SCREEN
+
 import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import axios from 'axios';
-import { vh } from '../../constants/Dimensions';
-import { vw } from '../../constants/Dimensions';
 import { BASE_URL } from '@env';
 import { ENDPOINTS } from '../../utils/Endpoints';
-
+import { moderateScale } from 'react-native-size-matters';
 
 interface CategoryItem {
   id: string;
@@ -15,7 +17,6 @@ interface CategoryItem {
 interface MyComponentProps {
   name: string;
 }
-
 
 const MyComponent: React.FC<MyComponentProps> = ({ name }) => {
   return (
@@ -31,25 +32,28 @@ const renderItem = ({ item }: { item: CategoryItem }) => {
   );
 };
 
+const itemSeparator = () => (
+  <View style={styles.separator} />
+);
+
 const Categories: React.FC = () => {
   const [DATA, setDATA] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
-
-    let dataToSend = {
-      page: 1, limt: 20
-    }
-    axios
-      .get(`${BASE_URL}${ENDPOINTS.Categories}?${dataToSend.limt}&${dataToSend.page}`)
-      // .get('https://api.euron.one/api/v1/categories?page=1&limit=20')
-      .then(response => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}${ENDPOINTS.Categories}?limit=20&page=1`
+        );
         const apiData: CategoryItem[] = response.data.data;
         const allElement: CategoryItem = { id: '0', title: 'All' };
         setDATA([allElement, ...apiData]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   return (
@@ -59,7 +63,8 @@ const Categories: React.FC = () => {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
         horizontal
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={itemSeparator}
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
@@ -69,22 +74,22 @@ export default Categories;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: vh(23),
+    marginTop: moderateScale(23),
   },
   elementcontainer: {
     justifyContent: 'center',
-    paddingHorizontal: vw(5),
-    paddingVertical: vh(5),
+    paddingHorizontal: moderateScale(5),
+    paddingVertical: moderateScale(5),
     borderWidth: 1,
     borderColor: '#212121',
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
   },
   element: {
     color: 'white',
     fontWeight: '700',
-    fontSize: vw(13),
+    fontSize: moderateScale(13),
   },
   separator: {
-    width: 13,
+    width: moderateScale(13),
   },
 });

@@ -15,12 +15,7 @@ import { navigate, resetAndNavigate } from '../../utils/NavigationUtils';
 import { moderateScale } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { logout, setAuthState, setCredentials } from '../../redux/authSlice';
-
-interface HeaderProps {
-    user?: {
-        photoURL?: string;
-    };
-}
+import auth from '@react-native-firebase/auth';
 
 interface DropdownItem {
     id: string;
@@ -29,7 +24,9 @@ interface DropdownItem {
     img: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ user }) => {
+const Header: React.FC = () => {
+    const user = auth().currentUser;
+
 
     // const navigation = useNavigation();
     const [showList, setShowList] = useState(false);

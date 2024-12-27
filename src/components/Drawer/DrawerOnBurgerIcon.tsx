@@ -1,3 +1,5 @@
+// DONE
+
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator, DrawerContentComponentProps } from '@react-navigation/drawer';
@@ -6,7 +8,6 @@ import Bytes from '../../DrawerSideScreens/Bytes';
 import EuronPlus from '../../DrawerSideScreens/EuronPlus';
 import EuronOrg from '../../DrawerSideScreens/EuronOrg';
 import EuronAssist from '../../DrawerSideScreens/EuronAssist';
-import { vh } from '../../constants/Dimensions';
 import { Images } from '../../assets';
 import LiveCourses from '../../DrawerSideScreens/LiveCourses';
 import Courses from '../../DrawerSideScreens/Courses';
@@ -17,6 +18,8 @@ import Projects from '../../DrawerSideScreens/Projects';
 import Books from '../../DrawerSideScreens/Books';
 import CourseDescriptionScreen from '../InsideACourse/CourseDescriptionScreen';
 import Profile from '../../screens/Profile';
+import { moderateScale } from 'react-native-size-matters';
+// import InsideACourse from '../../screens/InsideACourse';
 
 const Drawer = createDrawerNavigator();
 
@@ -42,23 +45,29 @@ const drawerItems: DrawerItem[] = [
 ];
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+  const { state } = props;
+  const activeRoute = state?.routeNames[state.index];
   return (
     <View {...props} style={styles.drawerContainer}>
-      {drawerItems.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.drawerItem}
-          onPress={() => props.navigation.navigate(item.screen)}
-        >
-          <Image source={item.icon} style={styles.icon} />
-          <Text style={styles.drawerLabel}>{item.label}</Text>
-        </TouchableOpacity>
-      ))}
+      {drawerItems.map((item, index) => {
+        const isActive = activeRoute === item.screen;
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.drawerItem, isActive && styles.activeDrawerStyles]}
+            onPress={() => props.navigation.navigate(item.screen)}
+          >
+            <Image source={item.icon} style={[styles.icon, isActive && styles.activeDrawerIcon]} />
+
+            <Text style={[styles.drawerLabel, isActive && styles.activeDrawerLabel]}>{item.label}</Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
 
-const DrawerOnBurgerIcon: React.FC = () => {
+const DrawerOnBurgerIcon = () => {
   return (
     <Drawer.Navigator
       backBehavior="history"
@@ -66,13 +75,14 @@ const DrawerOnBurgerIcon: React.FC = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         drawerType: 'front',
-        // swipeEnabled:false,
+        // WIP
+        // swipeEnabled: false,
         headerShown: false,
         drawerStyle: {
           backgroundColor: '#061115',
           width: '65%',
           justifyContent: 'center',
-          paddingHorizontal: 40,
+          paddingHorizontal: moderateScale(20),
         },
       }}
     >
@@ -90,6 +100,7 @@ const DrawerOnBurgerIcon: React.FC = () => {
       <Drawer.Screen name="Books" component={Books} />
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Course Description Screen" component={CourseDescriptionScreen} />
+      {/* <Drawer.Screen name="Inside A Course" component={InsideACourse} /> */}
     </Drawer.Navigator>
   );
 };
@@ -99,29 +110,43 @@ export default DrawerOnBurgerIcon;
 const styles = StyleSheet.create({
   drawerContainer: {
     backgroundColor: '#061115',
-    marginTop: vh(40),
+    marginTop: moderateScale(40),
   },
   drawerItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: vh(15),
-    marginBottom: 5,
+    paddingVertical: moderateScale(12),
+    marginBottom: moderateScale(5),
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: moderateScale(24),
+    height: moderateScale(24),
     resizeMode: 'contain',
-    marginRight: 15,
+    marginRight: moderateScale(15),
+    marginLeft: moderateScale(15),
+    tintColor: 'white'
   },
   drawerLabel: {
     color: 'white',
-    fontSize: 18,
+    fontSize: moderateScale(18),
     fontWeight: '600',
   },
   sectionHeader: {
     color: '#26A69A',
-    fontSize: 17,
+    fontSize: moderateScale(17),
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginVertical: moderateScale(10),
+  },
+
+  // ACTIVE DRAWER STYLES
+  activeDrawerStyles: {
+    backgroundColor: '#0D2527',
+    borderRadius: moderateScale(12),
+  },
+  activeDrawerIcon: {
+    tintColor: '#40E0D0',
+  },
+  activeDrawerLabel: {
+    color: '#40E0D0',
   },
 });

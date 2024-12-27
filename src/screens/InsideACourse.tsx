@@ -1,154 +1,194 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { ActivityIndicator } from 'react-native'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
-import Header from '../components/HomeScreen/Header'
-import auth from '@react-native-firebase/auth';
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Images } from '../assets'
-import { vh } from '../constants/Dimensions'
-import { navigationrRef } from '../utils/NavigationUtils'
-import Lectures from '../components/InsideACourse/Lectures'
-import Reviews from '../components/InsideACourse/Reviews'
-
+import axios from 'axios';
+import { Images } from '../assets';
+import { navigationrRef } from '../utils/NavigationUtils';
+import { moderateScale } from 'react-native-size-matters';
+import Header from '../components/HomeScreen/Header';
+import Lectures from '../components/InsideACourse/Lectures';
+import Reviews from '../components/InsideACourse/Reviews';
+import { RouteProp } from '@react-navigation/native';
 
 const DATA = [
-    {
-        id: 1,
-        tab: 'Lectures'
-    },
-    {
-        id: 2,
-        tab: 'Overview'
-    },
-    {
-        id: 3,
-        tab: 'Q&A'
-    },
-    {
-        id: 4,
-        tab: 'Reviews'
-    },
+    { id: 1, tab: 'Lectures' },
+    { id: 2, tab: 'Overview' },
+    { id: 3, tab: 'Q&A' },
+    { id: 4, tab: 'Reviews' },
 ];
 
-const user = auth().currentUser;
+type InsideACourseParams = {
+    id: string;
+};
 
-const InsideACourse = ({ route }) => {
+type InstructorDetails = {
+    fullName: string;
+    expertise: string;
+    bio: string;
+};
+
+type CourseData = {
+    title: string;
+    categoryTitle: string;
+    description: string;
+    previewUrl: string;
+    instructorDetails: InstructorDetails[];
+};
+
+type InstructorProps = {
+    profileUrl?: string;
+}
+
+type InsideACourseProps = {
+    route: RouteProp<{ params: InsideACourseParams }, 'params'>;
+};
+
+const InsideACourse: React.FC<InsideACourseProps> = ({ route }) => {
 
     const { id } = route.params;
-    const [courseData, setCourseData] = useState(null);
+    const [courseData, setCourseData] = useState<CourseData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [embedImg, setEmbedImg] = useState(null);
-    const [selectedTab, setSelectedTab] = useState('Lectures')
-    const [passedTitle, setPassedTitle] = useState(null)
-
-    // console.log('mera-->', courseData.title)
+    const [selectedTab, setSelectedTab] = useState<string | null>('Lectures');
+    const [instructorResponse, setInstructorResponse] = useState<InstructorProps[] | null>(null);
 
     useEffect(() => {
-        axios.get(`https://api.euron.one/api/v1/courses/course/${id}`)
-            .then(response => {
-                console.log('response==>', response.data.data)
-                setPassedTitle(response.data.data.title)
+        const fetchCourseData = async () => {
+            try {
+                const response = await axios.get(`https://api.euron.one/api/v1/courses/course/${id}`);
                 setCourseData(response.data.data);
-                setLoading(false);
-                setEmbedImg(response.data.data.previewUrl)
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching course data:', error);
+            } finally {
                 setLoading(false);
-            })
-    }, [id])
+            }
+        };
+        fetchCourseData();
+    }, [id]);
+
+    useEffect(() => {
+        const instructorDetails = async () => {
+            try {
+                const instructorResponseObject = await axios.get(`https://api.euron.one/api/v1/courses/${id}/instructors`);
+                setInstructorResponse(instructorResponseObject.data.data);
+            }
+            catch (error) {
+                console.log('Error fetching instructor details: ', error);
+            }
+        };
+        instructorDetails();
+    }, [id]);
+
+    const profileImg = instructorResponse?.[0]?.profileUrl?.split('/').pop();
+
+    const pImg = `https://euron.one/_next/image?url=https%3A%2F%2Feuron-prod-user-profile-pics.s3.ap-south-1.amazonaws.com%2Fprofile%2F${profileImg}&w=750&q=75`;
+
+
+    console.log('web-->', pImg);
 
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
                 <ActivityIndicator size="large" color="#0E99AD" />
             </View>
-        )
+        );
     }
-    // console.log('embedimg-->', embedImg)
 
-    const handleTabChange = (tab) => {
-        setSelectedTab(tab)
-    }
+    const handleTabChange = (tab: string) => {
+        setSelectedTab(tab);
+    };
+
+    const renderTabContent = () => {
+        switch (selectedTab) {
+            case 'Lectures':
+                return <View> <Lectures passedTitle={courseData?.title || ''} /> </View>;
+            case 'Overview':
+                return (
+                    <View style={styles.overviewContainer}>
+                        <Text style={styles.overviewCategory}>{courseData?.categoryTitle}</Text>
+                        <Text style={styles.overviewDescription} numberOfLines={2}>{courseData?.description}</Text>
+                        <Text style={styles.readMore}>Read More</Text>
+                        <Text style={styles.overviewInstructor}>{courseData?.instructorDetails[0].fullName}</Text>
+                        <Text style={styles.overviewExpertise}>{courseData?.instructorDetails[0].expertise}</Text>
+                        <Image source={{ uri: pImg }} style={styles.profileImage} />
+                        <Text style={styles.overviewBio}>{courseData?.instructorDetails[0].bio}</Text>
+                    </View>
+                );
+            case 'Q&A':
+                return (
+                    <Text style={styles.qaText}>Yha pr Q&A ka content aa jayega</Text>
+                );
+            case 'Reviews':
+                return (
+                    <Reviews />
+                );
+            default:
+                null;
+        }
+    };
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: "#040E12" }}>
-            <SafeAreaView>
-                <View style={{ flex: 1 }}>
-                    <Header user={user} />
+        <SafeAreaView style={styles.mainContainer}>
 
-                    <TouchableOpacity style={{ flexDirection: 'row', gap: 8, alignItems: 'center', marginLeft: 10, marginTop: 10, marginBottom: 10 }} onPress={() => navigationrRef.goBack()}>
-                        <Image source={Images.backarrow} style={styles.backarrow} />
-                        <Text style={styles.backtext}>Back</Text>
-                    </TouchableOpacity>
+            <Header />
 
-                    {embedImg ? (
-                        <WebView
-                            source={{ uri: embedImg }}
-                            style={styles.embedimg}
-                            javaScriptEnabled={true}
-                            allowsInlineMediaPlayback={true}
-                            domStorageEnabled={true}
-                        />
-                    ) : (
-                        <Text>no lecture</Text>
-                    )}
+            <TouchableOpacity style={styles.backButton} onPress={() => navigationrRef.goBack()}>
+                <Image source={Images.backarrow} style={styles.backarrow} />
+                <Text style={styles.backtext}>Back</Text>
+            </TouchableOpacity>
 
-                    <View style={{ backgroundColor: '#121717' }}>
+            <ScrollView style={styles.scrollView}>
 
-                        <FlatList
-                            data={DATA}
-                            keyExtractor={(item) => item.id.toString()}
-                            horizontal
-                            renderItem={({ item }) => {
-                                // console.log("item-->", item)
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => handleTabChange(item.tab)}
-                                    >
-                                        <Text style={[selectedTab === item.tab ? { color: '#0A99AC', fontSize: 21, fontWeight: '700' } : { color: 'white', fontSize: 21, fontWeight: '700' }]}>
-                                            {item.tab}{"        "}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
+                {/* VIDEO CONTAINER */}
+                {courseData?.previewUrl ? (
+                    <WebView
+                        source={{ uri: courseData.previewUrl }}
+                        style={styles.embedimg}
+                        javaScriptEnabled
+                        allowsInlineMediaPlayback
+                        domStorageEnabled
+                    />
+                ) : (
+                    <Text style={styles.noLectureText}>No lecture</Text>
+                )}
+                {/* VIDEO CONTAINER */}
 
-                        <View>
-                            {selectedTab === 'Lectures' && (
-                                <View>
-                                    <Lectures passedTitle = {passedTitle}/>
-                                </View>
-                            )}
-                            {selectedTab === 'Overview' && (
-                                <View style={{ gap: 10, marginTop: vh(15) }}>
-                                    <Text style={{ color: 'white', fontWeight: '700', fontSize: 22 }}>{courseData.categoryTitle}</Text>
-                                    <Text style={{ color: '#999A9A', fontSize: 18, fontWeight: '500' }} numberOfLines={2}>{courseData.description}</Text>
-                                    <Text style={{ color: '#0A99AC' }}>{courseData.instructorDetails[0].fullName}</Text>
-                                    <Text style={{ color: 'white' }}>{courseData.instructorDetails[0].expertise}</Text>
-                                    <Text style={{ color: 'white' }}>{courseData.instructorDetails[0].bio}</Text>
-                                </View>
-                            )}{selectedTab === 'Q&A' && (
-                                <Text>yha pr q&a ka content aa jayega</Text>
-                            )}{selectedTab === 'Reviews' && (
-                                <Reviews/>
-                            )}
-                        </View>
-                    </View>
+                <View style={styles.tabContainer}>
 
+                    {/* TABS FLATLIST */}
+                    <FlatList
+                        data={DATA}
+                        keyExtractor={(item) => item.id.toString()}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => handleTabChange(item.tab)}
+                            >
+                                <Text style={[styles.tabText, selectedTab === item.tab && styles.selectedTabText]}>
+                                    {item.tab}{'        '}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
 
+                    <View>{renderTabContent()}</View>
                 </View>
-            </SafeAreaView>
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
 
-        </ScrollView>
-
-    )
-}
-
-export default InsideACourse
+export default InsideACourse;
 
 const styles = StyleSheet.create({
     loaderContainer: {
@@ -157,19 +197,105 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     embedimg: {
+        flex: 1,
         marginBottom: 15,
         resizeMode: 'contain',
         height: 250,
-        width: '100%'
+        width: '100%',
     },
     backtext: {
         color: 'white',
-        fontSize: 20
+        fontSize: moderateScale(20),
     },
     backarrow: {
         tintColor: 'white',
-        height: vh(25),
-        width: vh(25),
+        height: moderateScale(25),
+        width: moderateScale(25),
         resizeMode: 'contain',
-    }
-})
+    },
+    scrollView: {
+        flex: 1,
+        backgroundColor: '#040E12',
+    },
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#040E12',
+    },
+    backButton: {
+        flexDirection: 'row',
+        gap: 8,
+        alignItems: 'center',
+        marginLeft: moderateScale(10),
+        marginTop: moderateScale(10),
+        marginBottom: moderateScale(10),
+    },
+    noLectureText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 18,
+        marginVertical: 10,
+    },
+    tabContainer: {
+        backgroundColor: '#121717',
+    },
+    tabText: {
+        color: 'white',
+        fontSize: 21,
+        fontWeight: '700',
+    },
+    selectedTabText: {
+        color: '#0A99AC',
+    },
+    overviewContainer: {
+        gap: 10,
+        marginTop: moderateScale(15),
+        padding: 20,
+    },
+    overviewCategory: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 24,
+    },
+    overviewDescription: {
+        color: '#999A9A',
+        fontSize: 20,
+        fontWeight: '500',
+        marginTop: moderateScale(12),
+
+    },
+    overviewInstructor: {
+        color: '#0A99AC',
+        fontSize: moderateScale(22),
+        fontWeight: '700',
+        borderBottomWidth: 2,
+        borderColor: '#0A99AC',
+        marginTop: moderateScale(14),
+        marginBottom: moderateScale(7),
+    },
+    overviewExpertise: {
+        color: '#6A6F73',
+        fontSize: moderateScale(18),
+    },
+    overviewBio: {
+        color: '#949595',
+        fontSize:moderateScale(13.5),
+    },
+    qaText: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center',
+        marginVertical: 10,
+    },
+    readMore: {
+        color: '#0A99AC',
+        fontSize: moderateScale(20),
+    },
+    profileImage: {
+        height: moderateScale(150),
+        width: moderateScale(150),
+        // resizeMode: 'contain',
+        borderRadius: 1000,
+        alignSelf: 'center',
+        marginVertical:moderateScale(20),
+    },
+});

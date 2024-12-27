@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { vh, vw } from '../../constants/Dimensions';
 import React, { useState, useEffect } from 'react';
 import { Images } from '../../assets';
+import { moderateScale } from 'react-native-size-matters';
 
 
 
@@ -25,7 +25,7 @@ const GoodMorning = () => {
   const [textIndex, setTextIndex] = useState(0);
   const [letterIndex, setLetterIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(false);
-  const [containerHeight, setContainerHeight] = useState(vh(100));
+  const [containerHeight, setContainerHeight] = useState(moderateScale(100));
 
 
 
@@ -73,14 +73,14 @@ const GoodMorning = () => {
   },);
 
   const handleTextLayout = (event) => {
-    const {height} = event.nativeEvent.layout;
-    setContainerHeight(vw(135) + height + 20);
+    const { height } = event.nativeEvent.layout;
+    setContainerHeight(moderateScale(135) + height + 20);
   };
 
 
 
   return (
-    <View style={[styles.container, {height: containerHeight}]}>
+    <View style={[styles.container, { height: containerHeight }]}>
       <Text style={styles.goodevening}>
         Good Evening
       </Text>
@@ -101,7 +101,7 @@ const GoodMorning = () => {
         </Text>
 
         <View style={styles.exploreicon}>
-          <Image source={Images.arrowUpperRight} style={styles.arrowicon}/>
+          <Image source={Images.arrowUpperRight} style={styles.arrowicon} />
         </View>
       </View>
 
@@ -113,9 +113,9 @@ export default GoodMorning;
 
 const styles = StyleSheet.create({
   container: {
-    height: vh(293),
-    marginTop: vh(20),
-    borderRadius: vw(20),
+    height: moderateScale(293),
+    marginTop: moderateScale(20),
+    borderRadius: moderateScale(20),
     backgroundColor: '#1F5F69',
     paddingTop: 20,
     paddingHorizontal: 20,
@@ -129,41 +129,41 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     marginTop: 10,
-    lineHeight:25,
+    lineHeight: 25,
   },
   cursor: {
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
   },
-  partnership:{
-    width:vw(190),
-    height:vh(50),
-    alignItems:'center',
-    justifyContent:'center',
-    borderRadius:10,
-    backgroundColor:'#20383F',
-    flexDirection:'row',
-    gap:vw(7),
-    marginTop:20,
+  partnership: {
+    width: moderateScale(190),
+    height: moderateScale(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#20383F',
+    flexDirection: 'row',
+    gap: moderateScale(7),
+    marginTop: 20,
   },
-  textexplore:{
-    color:'white',
-    fontWeight:'800',
-    fontSize:15,
+  textexplore: {
+    color: 'white',
+    fontWeight: '800',
+    fontSize: 15,
   },
-  exploreicon:{
-    backgroundColor:'#071D1F',
-    borderRadius:100,
-    height:vh(26),
-    width:vh(26),
-    alignItems:'center',
-    justifyContent:'center',
+  exploreicon: {
+    backgroundColor: '#071D1F',
+    borderRadius: 100,
+    height: moderateScale(26),
+    width: moderateScale(26),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  arrowicon:{
-    height:vh(10),
-    width:vh(10),
-    resizeMode:'contain',
-    tintColor:'white',
+  arrowicon: {
+    height: moderateScale(10),
+    width: moderateScale(10),
+    resizeMode: 'contain',
+    tintColor: 'white',
   },
 });

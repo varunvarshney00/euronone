@@ -16,7 +16,7 @@ type RootStackParamList = {
 type CourseDescriptionScreenRouteProp = RouteProp<RootStackParamList, 'CourseDescription'>;
 
 interface Props {
-    route: CourseDescriptionScreenRouteProp;
+    route?: CourseDescriptionScreenRouteProp;
 }
 
 interface CourseData {
@@ -57,6 +57,25 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
         }
     };
 
+    const fetchInstructorDetails = async (id: string[] | undefined) => {
+        try {
+            const instructor = await axios.get(`https://api.euron.one/api/v1/courses/${id}/instructors`);
+
+            // console.log('instructor-->', instructor.data.data[0].fullName);
+            if (instructor?.data?.data) {
+                const instructorDetails = instructor.data.data;
+                setINSTRUCTOR(instructorDetails);
+            }
+            else {
+                console.warn('No live courses data available from the API.');
+                setINSTRUCTOR({});
+            }
+        } catch (error) {
+            console.error('Error fetching Instructor Details:', error);
+
+        }
+    }
+
     const fetchDetails = async () => {
         try {
             const response = await axios.get(
@@ -80,6 +99,7 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
 
     const [DATA, setDATA] = useState<CourseData>({});
     const [TOPIC, setTOPIC] = useState({});
+    const [INSTRUCTOR, setINSTRUCTOR] = useState({});
 
 
     useEffect(() => {
@@ -89,6 +109,10 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
     useEffect(() => {
         fetchCourseTopics(DATA.id);
     }, [DATA.id]);
+
+    useEffect(() => {
+        fetchInstructorDetails(DATA.id);
+    }, [DATA.id])
 
     const webThumbnailUrl = DATA.mobileThumbnailUrl
         ? `https://euron.one/_next/image?url=${encodeURIComponent(
@@ -213,7 +237,7 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
                                         </View>
                                         <View style={styles.separatorcoursetitle} />
                                         {item.subtopics.map((sub) => {
-                                            console.log('sub-->', sub.title);
+                                            // console.log('sub-->', sub.title);
                                             return (
                                                 <View style={styles.subtitlecontainer}>
                                                     <Image source={Images.subtitletv} style={styles.subtitletv} />
@@ -243,7 +267,17 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
 
                     {/* Description */}
                     <View>
-                        <Text style={{ color: 'white', marginTop:20 }}>{DATA.description}</Text>
+                        <Text style={{ color: 'white', marginTop: 20 }}>{DATA.description}</Text>
+                    </View>
+
+                    {/* Instructor */}
+                    <View>
+                        <Text style={{color:'white'}}>{INSTRUCTOR[0].fullName}</Text>
+                        <Text style={{color:'white'}}>{INSTRUCTOR[0].expertise}</Text>
+                        {/* INSTRUCTOR IMAGE */}
+                        <Text style={{color:'white'}}>{INSTRUCTOR[0].averageRating} Instructor Rating</Text>
+                        <Text style={{color:'white'}}>{INSTRUCTOR[0].bio}</Text>
+
                     </View>
 
 

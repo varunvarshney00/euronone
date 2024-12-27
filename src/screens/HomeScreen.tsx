@@ -1,41 +1,44 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+// THIS IS OUR MAIN HOMESCREEN
+
 import React from 'react';
-import Header from '../components/HomeScreen/Header';
-import { vw } from '../constants/Dimensions';
-import GoodMorning from '../components/HomeScreen/GoodMorning';
-import Categories from '../components/HomeScreen/Categories';
-import FlatBytes from '../components/HomeScreen/FlatBytes';
-import Reels from '../components/HomeScreen/Reelz/Reels';
-import auth from '@react-native-firebase/auth';
-import LiveCourses from '../components/HomeScreen/LiveCourses';
-import Books from '../components/HomeScreen/Books';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { useNavigation } from '@react-navigation/native';
+
+// SCREENS
+import Header from '../components/HomeScreen/Header';
+// import GoodMorning from '../components/HomeScreen/GoodMorning';
+import Categories from '../components/HomeScreen/Categories';
+import LiveCourses from '../components/HomeScreen/LiveCourses';
 import PopularCourses from '../components/HomeScreen/PopularCourses';
 import NewlyAddedCourses from '../components/HomeScreen/NewlyAddedCourses';
 import Footer from '../components/HomeScreen/Footer';
 
-const HomeScreen = ({ navigation }) => {
-
-  // console.log('navigation-->', navigation)
-
-  const user = auth().currentUser;
-  // const navigation = useNavigation()
-
+const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Header user={user}/>
-        {/* <GoodMorning /> */}
-        <Categories />
-        {/* <Reels /> */}
-        <LiveCourses />
-        <PopularCourses/>
-        <NewlyAddedCourses/>
-        {/* <FlatBytes /> */}
 
-        {/* <Books /> */}
-        <Footer/>
+      <ScrollView>
+        {/* The header inside screens. */}
+        <Header />
+
+        {/* Good Morning User animation */}
+        {/* WIP */}
+        {/* <GoodMorning /> */}
+
+        {/* Tech Categories */}
+        <Categories />
+
+        {/* Live Courses List */}
+        <LiveCourses />
+
+        {/* Popular Courses List */}
+        <PopularCourses />
+
+        {/* Newly Added Courses List */}
+        <NewlyAddedCourses />
+
+        {/* Main Footer of our app. */}
+        <Footer />
       </ScrollView>
 
     </SafeAreaView>
