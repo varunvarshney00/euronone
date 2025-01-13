@@ -272,11 +272,11 @@ const CourseDescriptionScreen: React.FC<Props> = ({ route }) => {
 
                     {/* Instructor */}
                     <View>
-                        <Text style={{color:'white'}}>{INSTRUCTOR[0].fullName}</Text>
-                        <Text style={{color:'white'}}>{INSTRUCTOR[0].expertise}</Text>
+                        {/* <Text style={{color:'white'}}>{INSTRUCTOR[0].fullName}</Text> */}
+                        {/* <Text style={{color:'white'}}>{INSTRUCTOR[0].expertise}</Text> */}
                         {/* INSTRUCTOR IMAGE */}
-                        <Text style={{color:'white'}}>{INSTRUCTOR[0].averageRating} Instructor Rating</Text>
-                        <Text style={{color:'white'}}>{INSTRUCTOR[0].bio}</Text>
+                        {/* <Text style={{color:'white'}}>{INSTRUCTOR[0].averageRating} Instructor Rating</Text> */}
+                        {/* <Text style={{color:'white'}}>{INSTRUCTOR[0].bio}</Text> */}
 
                     </View>
 

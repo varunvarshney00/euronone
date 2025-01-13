@@ -1,6 +1,6 @@
-import { CommonActions, createNavigationContainerRef, StackActions } from '@react-navigation/native';
+    import { CommonActions, createNavigationContainerRef, StackActions } from '@react-navigation/native';
 
-export const navigationrRef = createNavigationContainerRef();
+    export const navigationrRef = createNavigationContainerRef();
 
 export async function navigate(routeName: string, params?: object) {
     navigationrRef.isReady();
